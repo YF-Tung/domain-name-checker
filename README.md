@@ -1,4 +1,5 @@
 # Domain Name Checker
+[![Build Status](https://travis-ci.org/YF-Tung/domain-name-watcher.svg?branch=master)](https://travis-ci.org/YF-Tung/domain-name-watcher)
 > Check domain name status in batch, with style!
 [https://github.com/YF-Tung/domain-name-watcher](https://github.com/YF-Tung/domain-name-watcher)
 
