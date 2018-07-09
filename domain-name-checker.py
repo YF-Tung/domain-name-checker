@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import sys
+import argparse
 import csv
 import subprocess
 import ConfigParser
@@ -106,7 +108,13 @@ def summary(result_list):
   rv += '\nDate: ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
   return rv
 
-def send_email(result_list, output_message_list, config):
+def send_email(result_list, output_message_list, config, always_send_email):
+  if len([ x for x in result_list if x != State.OK]) == 0:
+    print ('All test passed.')
+    if always_send_email:
+      print('Sending email anyway.')
+    else:
+      return
   body = summary(result_list) + '\n\n' + '\n'.join(output_message_list)
   ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
   body = ansi_escape.sub('', body)
@@ -123,10 +131,12 @@ def send_email(result_list, output_message_list, config):
   smtp.login(sender, passwd)
 
   smtp.sendmail(msg['From'], msg['To'], msg.as_string())
-  print (msg.as_string())
   print ('Mail sent to ' + msg['To'])
 
 def main():
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--always-send-email', dest = 'always_send_email', help = 'Send an email even if all test passed. Default: False',  default = False, type = bool)
+  args = parser.parse_args()
   config = ConfigParser.ConfigParser()
   config.read('config.ini')
   cnt = 0
@@ -151,7 +161,7 @@ def main():
     print (output_message)
 
   print(summary(result_list))
-  send_email(result_list, output_message_list, config)
+  send_email(result_list, output_message_list, config, args.always_send_email)
 
 if __name__ == "__main__":
   main()
