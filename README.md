@@ -9,7 +9,17 @@ Python (2 or 3)
 ## Usage example
 
 * Add domains you want to check into `domains.csv`
-* ./domain-name-checker.py
+* Add mailing config into config.ini
+* `./domain-name-checker.py`
+
+## Config.ini example
+```ini
+[Mail]
+Sender = myname@gmail.com
+Password = mygmailpassword
+Receivers = someone@gmail.com,another@gmail.com
+MailServer = smtp.gmail.com:587
+```
 
 ## Domains.csv example
 ```

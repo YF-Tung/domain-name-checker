@@ -2,6 +2,11 @@
 
 import csv
 import subprocess
+import ConfigParser
+import smtplib
+import re
+import datetime
+from email.mime.text import MIMEText
 
 DOMAIN_LIST_FILE = 'domains.csv'
 
@@ -25,9 +30,9 @@ class State:
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
+    OKGREEN = '\033[32m'
     WARNING = '\033[93m'
-    FAIL = '\033[91m'
+    FAIL = '\033[31m'
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
@@ -87,19 +92,43 @@ class Domain:
       output_message_list.append(return_string)
     return return_state
 
-def print_summary(result_list):
+def summary(result_list):
   cnt = {}
   for result in result_list:
     cnt[result] = cnt.get(result, 0) + 1
-  print ('Summary:')
+  rv = 'Summary:'
   for state in State.get_list():
     if state in cnt:
       string = '\t' + State.to_color_string(state) + ' : ' + str(cnt[state]) + ' domain'
       if cnt[state] > 1:
         string += 's'
-      print (string)
+      rv += '\n' + string
+  rv += '\nDate: ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+  return rv
+
+def send_email(result_list, output_message_list, config):
+  body = summary(result_list) + '\n\n' + '\n'.join(output_message_list)
+  ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
+  body = ansi_escape.sub('', body)
+  msg = MIMEText(body)
+  msg['Subject'] = '[DomainNameChecker] Domain name check result'
+  sender = config.get('Mail', 'Sender')
+  passwd = config.get('Mail', 'Password')
+  msg['From'] = sender
+  msg['To'] = config.get('Mail', 'Receivers')
+
+  smtp = smtplib.SMTP(config.get("Mail", "MailServer"))
+  smtp.ehlo()
+  smtp.starttls()
+  smtp.login(sender, passwd)
+
+  smtp.sendmail(msg['From'], msg['To'], msg.as_string())
+  print (msg.as_string())
+  print ('Mail sent to ' + msg['To'])
 
 def main():
+  config = ConfigParser.ConfigParser()
+  config.read('config.ini')
   cnt = 0
   domain_list = []
   with open(DOMAIN_LIST_FILE) as csvfile:
@@ -114,14 +143,15 @@ def main():
     print (str(cnt) + ' domains found')
 
   result_list = []
+  output_message_list = []
   for domain in domain_list:
-    output_message_list = []
     result_list.append(domain.check(output_message_list))
     
-    for output_message in output_message_list:
-      print (output_message)
+  for output_message in output_message_list:
+    print (output_message)
 
-  print_summary(result_list)
+  print(summary(result_list))
+  send_email(result_list, output_message_list, config)
 
 if __name__ == "__main__":
   main()
