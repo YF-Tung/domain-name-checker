@@ -11,6 +11,8 @@ Python (2 or 3)
 * Add domains you want to check into `domains.csv`
 * Add mailing config into config.ini
 * `./domain-name-checker.py`
+* It sends mails when some test failed. Specify `./domain-name-checker.py --always-send-email true` to force send a mail.
+* For further help, type `./domain-name-checker.py -h`
 
 ## Config.ini example
 ```ini
@@ -22,7 +24,7 @@ MailServer = smtp.gmail.com:587
 ```
 
 ## Domains.csv example
-```
+```csv
 # Sample file of domains.csv
 # Empty lines and lines starting with '#' will be ignored
 
