@@ -13,6 +13,7 @@ Python (2 or 3)
 * `./domain-name-checker.py`
 * It sends mails when some test failed. Specify `./domain-name-checker.py --always-send-email true` to force send a mail.
 * For further help, type `./domain-name-checker.py -h`
+* One can also use `./domain-name-checker.js` instead as a nodejs wrapper of python version
 
 ## Config.ini example
 ```ini
