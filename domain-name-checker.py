@@ -12,6 +12,7 @@ from email.mime.text import MIMEText
 
 DOMAIN_LIST_FILE = 'config/domains.csv'
 
+
 class State:
     OK = 'OK'
     NotFound = 'Not found'
@@ -20,7 +21,8 @@ class State:
 
     @staticmethod
     def get_list():
-        return [State.OK, State.NotFound, State.NotAsExpected, State.InvalidQuery]
+        return [State.OK, State.NotFound,
+                State.NotAsExpected, State.InvalidQuery]
 
     @staticmethod
     def to_color_string(state):
@@ -28,6 +30,7 @@ class State:
             return bcolors.OKGREEN + State.OK + bcolors.ENDC
         else:
             return bcolors.FAIL + state + bcolors.ENDC
+
 
 class bcolors:
         HEADER = '\033[95m'
@@ -38,6 +41,7 @@ class bcolors:
         ENDC = '\033[0m'
         BOLD = '\033[1m'
         UNDERLINE = '\033[4m'
+
 
 class Domain:
     def __init__(self, row):
@@ -52,16 +56,19 @@ class Domain:
         if length >= 3:
             self.expected = row[2].strip()
         self.init = True
+
     def init_empty(self):
         self.init = False
         self.name = ''
         self.desc = '(No description)'
         self.expected = ''
+
     def toString(self):
         return ('Domain: "' + self.name
                 + '", description = "' + self.desc
                 + '", expected ip = "' + self.expected + '"')
-    def check(self, output_message_list = None):
+
+    def check(self, output_message_list=None):
         return_state, return_string = State.OK, ''
         if not self.init:
             return_string = 'Wrong format'
@@ -70,8 +77,11 @@ class Domain:
             ADDRESS_PREFIX = 'Address: '
             try:
                 output_bytes = subprocess.check_output(["nslookup", self.name])
-                output_lines = [str(byte_arr) for byte_arr in output_bytes.split(b'\n')]
-                address_lines = [line[len(ADDRESS_PREFIX):] for line in output_lines if line.startswith(ADDRESS_PREFIX)]
+                output_lines = [str(byte_arr) 
+                                for byte_arr in output_bytes.split(b'\n')]
+                address_lines = [line[len(ADDRESS_PREFIX):]
+                                 for line in output_lines
+                                 if line.startswith(ADDRESS_PREFIX)]
                 address = '(Not found)'
                 if len(address_lines) == 0:
                     return_state = State.NotFound
@@ -85,14 +95,18 @@ class Domain:
                 return_state = State.NotFound
                 address = '(Not found)'
 
-            return_string = 'Domain: "' + bcolors.BOLD + self.name + bcolors.ENDC \
-                                            + '" (' + self.desc + '), expected ip = "' + self.expected \
-                                            + '", found ip = "' + address \
-                                            + '", return_state = ' + State.to_color_string(return_state)
+            return_string = (
+                'Domain: "'
+                + bcolors.BOLD + self.name + bcolors.ENDC
+                + '" (' + self.desc + '), expected ip = "' + self.expected
+                + '", found ip = "' + address
+                + '", return_state = ' + State.to_color_string(return_state)
+            )
 
-        if output_message_list != None:
+        if output_message_list is not None:
             output_message_list.append(return_string)
         return return_state
+
 
 def _summary(result_list):
     cnt = {}
@@ -101,15 +115,19 @@ def _summary(result_list):
     rv = 'Summary:'
     for state in State.get_list():
         if state in cnt:
-            string = '\t' + State.to_color_string(state) + ' : ' + str(cnt[state]) + ' domain'
+            string = (
+                '\t' + State.to_color_string(state)
+                + ' : ' + str(cnt[state]) + ' domain'
+            )
             if cnt[state] > 1:
                 string += 's'
             rv += '\n' + string
     rv += '\nDate: ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
     return rv
 
+
 def _send_email(result_list, output_message_list, config, always_send_email):
-    if len([ x for x in result_list if x != State.OK]) == 0:
+    if len([x for x in result_list if x != State.OK]) == 0:
         print ('All test passed.')
         if always_send_email:
             print('Sending email anyway.')
@@ -137,10 +155,14 @@ def _send_email(result_list, output_message_list, config, always_send_email):
     smtp.sendmail(msg['From'], msg['To'], msg.as_string())
     print ('Mail sent to ' + msg['To'])
 
+
 def check():
     """ Check DOMAIN_LIST_FILE and output result """
     parser = argparse.ArgumentParser()
-    parser.add_argument('--always-send-email', dest = 'always_send_email', help = 'Send an email even if all test passed. Default: False',    default = False, type = bool)
+    parser.add_argument(
+        '--always-send-email', dest='always_send_email',
+        help='Send an email even if all test passed. Default: False',
+        default=False, type=bool)
     args = parser.parse_args()
     config = ConfigParser.ConfigParser()
     config.read('config/config.ini')
@@ -166,7 +188,8 @@ def check():
         print (output_message)
 
     print(_summary(result_list))
-    _send_email(result_list, output_message_list, config, args.always_send_email)
+    _send_email(result_list, output_message_list,
+                config, args.always_send_email)
 
 if __name__ == "__main__":
     check()
