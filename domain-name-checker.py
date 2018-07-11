@@ -10,7 +10,7 @@ import re
 import datetime
 from email.mime.text import MIMEText
 
-DOMAIN_LIST_FILE = 'domains.csv'
+DOMAIN_LIST_FILE = 'config/domains.csv'
 
 class State:
   OK = 'OK'
@@ -94,7 +94,7 @@ class Domain:
       output_message_list.append(return_string)
     return return_state
 
-def summary(result_list):
+def _summary(result_list):
   cnt = {}
   for result in result_list:
     cnt[result] = cnt.get(result, 0) + 1
@@ -108,14 +108,14 @@ def summary(result_list):
   rv += '\nDate: ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
   return rv
 
-def send_email(result_list, output_message_list, config, always_send_email):
+def _send_email(result_list, output_message_list, config, always_send_email):
   if len([ x for x in result_list if x != State.OK]) == 0:
     print ('All test passed.')
     if always_send_email:
       print('Sending email anyway.')
     else:
       return
-  body = summary(result_list) + '\n\n' + '\n'.join(output_message_list)
+  body = _summary(result_list) + '\n\n' + '\n'.join(output_message_list)
   ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
   body = ansi_escape.sub('', body)
   msg = MIMEText(body)
@@ -133,12 +133,13 @@ def send_email(result_list, output_message_list, config, always_send_email):
   smtp.sendmail(msg['From'], msg['To'], msg.as_string())
   print ('Mail sent to ' + msg['To'])
 
-def main():
+def check():
+  """ Check DOMAIN_LIST_FILE and output result """
   parser = argparse.ArgumentParser()
   parser.add_argument('--always-send-email', dest = 'always_send_email', help = 'Send an email even if all test passed. Default: False',  default = False, type = bool)
   args = parser.parse_args()
   config = ConfigParser.ConfigParser()
-  config.read('config.ini')
+  config.read('config/config.ini')
   cnt = 0
   domain_list = []
   with open(DOMAIN_LIST_FILE) as csvfile:
@@ -160,9 +161,9 @@ def main():
   for output_message in output_message_list:
     print (output_message)
 
-  print(summary(result_list))
-  send_email(result_list, output_message_list, config, args.always_send_email)
+  print(_summary(result_list))
+  _send_email(result_list, output_message_list, config, args.always_send_email)
 
 if __name__ == "__main__":
-  main()
+  check()
 
