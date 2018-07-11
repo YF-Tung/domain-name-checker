@@ -3,11 +3,13 @@ Domain Name Checker
 
 |Build Status| > Check domain name status in batch, with style!
 https://github.com/YF-Tung/domain-name-watcher
+[![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
 
 Requirement
 -----------
 
 Python (2 or 3)
+No other pip packages required.
 
 Usage example
 -------------
