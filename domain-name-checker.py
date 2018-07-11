@@ -128,7 +128,11 @@ def _send_email(result_list, output_message_list, config, always_send_email):
   smtp = smtplib.SMTP(config.get("Mail", "MailServer"))
   smtp.ehlo()
   smtp.starttls()
-  smtp.login(sender, passwd)
+  try:
+    smtp.login(sender, passwd)
+  except smtplib.SMTPAuthenticationError as e:
+    print ('Failed to login, cannot send mail!')
+    return
 
   smtp.sendmail(msg['From'], msg['To'], msg.as_string())
   print ('Mail sent to ' + msg['To'])
