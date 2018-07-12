@@ -1,9 +1,9 @@
 Domain Name Checker
 ===================
+Check domain name status in batch, with style!
 
-|Build Status| > Check domain name status in batch, with style!
-https://github.com/YF-Tung/domain-name-watcher
-[![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
+|Build Status| |PEP8|
+
 
 Requirement
 -----------
@@ -66,3 +66,5 @@ Distributed under the MIT license. See ``LICENSE`` for more information.
 
 .. |Build Status| image:: https://travis-ci.org/YF-Tung/domain-name-watcher.svg?branch=master
    :target: https://travis-ci.org/YF-Tung/domain-name-watcher
+
+.. |PEP8| image:: https://img.shields.io/badge/code%20style-pep8-orange.svg
