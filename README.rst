@@ -64,7 +64,7 @@ License
 
 Distributed under the MIT license. See ``LICENSE`` for more information.
 
-.. |Build Status| image:: https://travis-ci.org/YF-Tung/domain-name-watcher.svg?branch=master
-   :target: https://travis-ci.org/YF-Tung/domain-name-watcher
+.. |Build Status| image:: https://travis-ci.org/YF-Tung/domain-name-checker.svg?branch=master
+   :target: https://travis-ci.org/YF-Tung/domain-name-checker
 
 .. |PEP8| image:: https://img.shields.io/badge/code%20style-pep8-orange.svg
