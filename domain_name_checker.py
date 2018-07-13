@@ -4,7 +4,7 @@ import sys
 import argparse
 import csv
 import subprocess
-from six.move import configparser
+from six.moves import configparser
 import smtplib
 import re
 import datetime
