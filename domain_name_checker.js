@@ -2,7 +2,7 @@
 // This is a simple wrapper for domain-name-checker.py, in case one must use node
 
 const { spawn } = require('child_process');
-const dnc = spawn('./domain-name-checker.py', process.argv.slice(2))
+const dnc = spawn('./domain_name_checker.py', process.argv.slice(2))
 
 dnc.stdout.on('data', (data) => {
   console.log(`stdout: ${data}`);
