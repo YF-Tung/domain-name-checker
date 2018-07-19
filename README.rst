@@ -2,7 +2,7 @@ Domain Name Checker
 ===================
 Check domain name status in batch, with style!
 
-|Build Status| |PEP8|
+|BuildStatus| |Coverage| |PEP8|
 
 
 Requirement
@@ -64,7 +64,11 @@ License
 
 Distributed under the MIT license. See ``LICENSE`` for more information.
 
-.. |Build Status| image:: https://travis-ci.org/YF-Tung/domain-name-checker.svg?branch=master
+.. |BuildStatus| image:: https://travis-ci.org/YF-Tung/domain-name-checker.svg?branch=master
    :target: https://travis-ci.org/YF-Tung/domain-name-checker
 
+.. |Coverage| image:: https://coveralls.io/repos/github/YF-Tung/domain-name-checker/badge.svg?branch=master
+   :target: https://coveralls.io/github/YF-Tung/domain-name-checker?branch=master
+
 .. |PEP8| image:: https://img.shields.io/badge/code%20style-pep8-orange.svg
+
