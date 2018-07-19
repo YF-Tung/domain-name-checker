@@ -2,7 +2,7 @@ Domain Name Checker
 ===================
 Check domain name status in batch, with style!
 
-|BuildStatus| |Coverage| |PEP8|
+|BuildStatus| |Coverage| |PEP8| |License|
 
 
 Requirement
@@ -59,7 +59,7 @@ Domains.csv example
     no.such.domain, , 12.34.567.890
     github.com, wrong ip, 1.1.1.1
 
-License
+License |License|
 -------
 
 Distributed under the MIT license. See ``LICENSE`` for more information.
@@ -71,4 +71,7 @@ Distributed under the MIT license. See ``LICENSE`` for more information.
    :target: https://coveralls.io/github/YF-Tung/domain-name-checker?branch=master
 
 .. |PEP8| image:: https://img.shields.io/badge/code%20style-pep8-orange.svg
+
+.. |License| image:: https://img.shields.io/github/license/YF-Tung/domain-name-checker.svg
+   :target: https://github.com/YF-Tung/domain-name-checker/blob/master/LICENSE
 
