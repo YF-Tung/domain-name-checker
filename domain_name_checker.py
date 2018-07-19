@@ -12,6 +12,8 @@ from email.mime.text import MIMEText
 
 DOMAIN_LIST_FILE = 'config/domains.csv'
 
+def sample_func():
+    return 0
 
 class State:
     OK = 'OK'

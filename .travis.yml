@@ -5,21 +5,13 @@ python:
   - "3.3"
   - "3.4"
   - "3.5"
-  - "3.5-dev"  # 3.5 development branch
   - "3.6"
-  - "3.6-dev"  # 3.6 development branch
-  - "3.7-dev"  # 3.7 development branch
 # command to install dependencies
-# install:
-#   - pip install -r requirements.txt
+#install:
+#  - pip install -r requirements.txt
 before_script:
-  - pip install -r tests/requirements.txt
-  - git clone https://github.com/z4r/python-coveralls-example.git
-  - cd python-coveralls-example
-  - git checkout -qf 17b8119796516195527dcb4f454a2ebd41d60244
-  - py.test example/tests.py --cov=example
-  - cd -
+  - pip install -r test_requirements.txt
 script:
-  - py.test test_domain_name_checker.py --doctest-modules --pep8 coveralls -v --cov coveralls --cov-report term-missing
+  - py.test test_domain_name_checker.py --doctest-modules --pep8 coveralls -v --cov . --cov-report term-missing
 after_success:
   - coveralls
