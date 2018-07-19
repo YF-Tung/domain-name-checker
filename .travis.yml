@@ -12,6 +12,6 @@ python:
 before_script:
   - pip install -r test_requirements.txt
 script:
-  - py.test test_domain_name_checker.py --doctest-modules --pep8 coveralls -v --cov . --cov-report term-missing
+  - py.test test_domain_name_checker.py --doctest-modules --pep8 . -v --cov . --cov-report term-missing
 after_success:
   - coveralls
