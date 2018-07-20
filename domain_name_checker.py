@@ -158,14 +158,8 @@ def _send_email(result_list, output_message_list, config, always_send_email):
     print ('Mail sent to ' + msg['To'])
 
 
-def check():
+def check(args):
     """ Check DOMAIN_LIST_FILE and output result """
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '--always-send-email', dest='always_send_email',
-        help='Send an email even if all test passed. Default: False',
-        default=False, type=bool)
-    args = parser.parse_args()
     config = ConfigParser.ConfigParser()
     config.read('config/config.ini')
     cnt = 0
@@ -194,5 +188,11 @@ def check():
                 config, args.always_send_email)
 
 if __name__ == "__main__":
-    check()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--always-send-email', dest='always_send_email',
+        help='Send an email even if all test passed. Default: False',
+        default=False, type=bool)
+    args = parser.parse_args()
+    check(args)
 
