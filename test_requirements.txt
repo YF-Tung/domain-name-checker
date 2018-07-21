@@ -2,5 +2,6 @@ pytest
 pytest-pep8
 pytest-cov
 python-coveralls
+mock
 #httpretty
 git+https://github.com/melor/HTTPretty.git@py33

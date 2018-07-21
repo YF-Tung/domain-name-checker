@@ -18,3 +18,14 @@ class test_domain_name_checker(unittest.TestCase):
             domain_name_checker._send_email([], [], {}, True)
             instance = mock_smtp.return_value
             self.assertTrue(instance.sendmail.called)
+
+    @patch('domain_name_checker.smtplib.SMTP')
+    def test_dont_send_email_if_okay(self, mock_smtp):
+        result_list = [domain_name_checker.State.OK]
+        output_message_list = ['Dummy text']
+        instance = mock_smtp.return_value
+        domain_name_checker._send_email(
+            result_list,
+            output_message_list,
+            {}, False)
+        self.assertFalse(instance.sendmail.called)
